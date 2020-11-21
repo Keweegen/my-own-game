@@ -1,11 +1,11 @@
 <template>
-  <vs-dialog v-model="userDialog" v-if="!user" not-close prevent-close>
+  <vs-dialog v-model="userDialog" v-if="!user" not-close prevent-close blur>
     <template #header>
       <h4 class="not-margin">Добро пожаловать. Какое у вас <b>Имя</b>?</h4>
     </template>
 
     <div class="con-content">
-      <vs-input v-model.trim="username" placeholder="Имя">
+      <vs-input v-model.trim="username" placeholder="Введите свое имя" label="Имя">
         <template #message-danger>
           <template v-if="!$v.username.required">Поле обязательно для заполнения</template>
           <template v-if="!$v.username.minLength">Мин. кол-во символов должно быть - 2</template>
@@ -13,7 +13,7 @@
       </vs-input>
     </div>
 
-    <template #footer>
+    <template #footer v-if="!$v.$invalid">
       <div class="con-footer">
         <vs-button @click="setUsername" transparent>Продолжить</vs-button>
       </div>
@@ -68,26 +68,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.con-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.not-margin {
-  margin: 0;
-  font-weight: normal;
-  padding: 10px 10px 0 10px;
-}
-.con-content {
-  width: 100%;
-  .vs-input-content {
-    margin: 10px 0;
-    width: 100%;
-    .vs-input {
-      width: 100%;
-    }
-  }
-}
-</style>

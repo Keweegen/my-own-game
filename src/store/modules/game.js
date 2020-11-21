@@ -85,13 +85,13 @@ export const actions = {
     commit('CLEAR')
   },
 
-  add_answered_question({ commit, dispatch, state, getters }, { id, status }) {
+  add_answered_question({ commit, dispatch, getters }, { id, status }) {
     commit('ADD_ANSWERED_QUESTION', { id, status })
 
     const { category: theme } = getters.question(id)
     const answeredThemeQuestions = getters.is_answered_theme_questions(theme.id)
 
-    answeredThemeQuestions.length >= state.questions.length &&
+    answeredThemeQuestions.length >= getters.count_questions &&
       dispatch('add_answered_theme', theme.id)
   },
 
@@ -128,6 +128,8 @@ export const getters = {
     state.questions.filter(
       (question) => !getters.is_answered_question(question.id) && !!question.value
     ),
+
+  count_questions: (state) => state.questions.filter((question) => !!question.value).length,
 
   question: (state) => (id) => state.questions.find((question) => question.id === id),
 

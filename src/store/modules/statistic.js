@@ -50,4 +50,12 @@ export const actions = {
 
 export const getters = {
   info: (state) => state.info,
+
+  output_data: ({ info }) => [
+    { label: 'Имя', value: info.username },
+    { label: 'Всего игр', value: info.count_games },
+    { label: 'Правильных ответов', value: info.count_correct_answers },
+    { label: 'Неправильных ответов', value: info.count_wrong_answers },
+    { label: 'Баллы', value: info.points },
+  ],
 }

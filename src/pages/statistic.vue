@@ -11,29 +11,9 @@
       </template>
 
       <template #tbody>
-        <vs-tr>
-          <vs-td>Имя</vs-td>
-          <vs-td>{{ info.username }}</vs-td>
-        </vs-tr>
-
-        <vs-tr>
-          <vs-td>Всего игр</vs-td>
-          <vs-td>{{ info.count_games }}</vs-td>
-        </vs-tr>
-
-        <vs-tr>
-          <vs-td>Правильных ответов</vs-td>
-          <vs-td>{{ info.count_correct_answers }}</vs-td>
-        </vs-tr>
-
-        <vs-tr>
-          <vs-td>Неправильных ответов</vs-td>
-          <vs-td>{{ info.count_wrong_answers }}</vs-td>
-        </vs-tr>
-
-        <vs-tr>
-          <vs-td>Баллы</vs-td>
-          <vs-td>{{ info.points }}</vs-td>
+        <vs-tr v-for="(item, index) in outputData" :key="index">
+          <vs-td>{{ item.label }}</vs-td>
+          <vs-td>{{ item.value }}</vs-td>
         </vs-tr>
       </template>
     </vs-table>
@@ -49,6 +29,7 @@ export default {
   computed: {
     ...mapGetters({
       info: 'statistic/info',
+      outputData: 'statistic/output_data',
     }),
   },
 

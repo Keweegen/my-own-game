@@ -1,11 +1,9 @@
 <template>
-  <vs-dialog v-model="dialog" @close="$emit('close', true)" prevent-close>
+  <vs-dialog :value="dialog" @close="$emit('close', true)" prevent-close blur>
     <div class="con-content" v-if="!!Object.keys(question).length">
       <p><b>Тема:</b> {{ question.category.title }}</p>
       <p><b>Вопрос:</b> {{ question.question }}</p>
       <p><b>Ставка:</b> {{ question.value }}</p>
-
-      <p>{{ question.answer }}</p>
 
       <vs-input
         label="Ответ"

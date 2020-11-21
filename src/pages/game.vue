@@ -24,8 +24,9 @@
       </div>
 
       <table-questions
-        :count-themes="10"
-        :count-questions="10"
+        :count-themes="5"
+        :count-questions="5"
+        :offset-themes="100"
         @set-theme="setCurrentTheme"
         @set-question="setCurrentQuestion"
       />
@@ -55,6 +56,7 @@ export default {
   components: { TableQuestions, QuestionDialog },
   data() {
     return {
+      defaultTimer: 60,
       timer: 60,
       questionInterval: null,
       questionDialog: false,
@@ -79,11 +81,7 @@ export default {
   computed: {
     ...mapGetters({
       statusGame: 'game/status_game',
-      themes: 'game/themes',
-      questions: 'game/questions',
       pointsPerGame: 'game/points_per_game',
-      fetchThemes: 'game/fetching_themes',
-      fetchQuestions: 'game/fetching_questions',
       user: 'auth/user',
     }),
 
@@ -100,8 +98,6 @@ export default {
     ...mapActions({
       startGame: 'game/start_game',
       stopGame: 'game/stop_game',
-      getThemes: 'game/get_themes',
-      getQuestions: 'game/get_questions',
       setPoints: 'game/set_points',
       addAnsweredQuestion: 'game/add_answered_question',
       addCorrectAnswer: 'statistic/add_correct_answer',
@@ -128,6 +124,8 @@ export default {
       this.currentQuestion = question
       this.questionDialog = true
 
+      console.log(`${question.question}:`, question.answer)
+
       this.questionInterval = setInterval(() => {
         this.timer -= 1
       }, 1000)
@@ -135,13 +133,8 @@ export default {
 
     closeDialog(wrong = false) {
       if (wrong) {
-        this.$vs.notification({
-          progress: 'auto',
-          color: 'danger',
-          text: 'К сожалению, Вам не удалось правильно ответить на вопрос',
-        })
+        this.setWrongAnswer()
 
-        this.addWrongAnswer()
         this.setPoints({ value: this.currentQuestion.value, status: false })
         this.addAnsweredQuestion({ id: this.currentQuestion.id, status: false })
       }
@@ -151,32 +144,36 @@ export default {
       this.questionAnswer = null
 
       clearInterval(this.questionInterval)
-      this.timer = 60
+      this.timer = this.defaultTimer
     },
 
     setQuestion(status = true) {
-      if (status) {
-        this.$vs.notification({
-          progress: 'auto',
-          color: 'success',
-          text: 'Поздравляем! Вы успешно ответили на вопрос',
-        })
-
-        this.addCorrectAnswer()
-      } else {
-        this.$vs.notification({
-          progress: 'auto',
-          color: 'danger',
-          text: 'К сожалению, Вам не удалось правильно ответить на вопрос',
-        })
-
-        this.addWrongAnswer()
-      }
+      status ? this.setCorrectAnswer() : this.setWrongAnswer()
 
       this.setPoints({ value: this.currentQuestion.value, status })
       this.addAnsweredQuestion({ id: this.currentQuestion.id, status })
 
       this.closeDialog()
+    },
+
+    setCorrectAnswer() {
+      this.$vs.notification({
+        progress: 'auto',
+        color: 'success',
+        text: 'Поздравляем! Вы успешно ответили на вопрос',
+      })
+
+      this.addCorrectAnswer()
+    },
+
+    setWrongAnswer() {
+      this.$vs.notification({
+        progress: 'auto',
+        color: 'danger',
+        text: 'К сожалению, Вам не удалось правильно ответить на вопрос',
+      })
+
+      this.addWrongAnswer()
     },
   },
 }

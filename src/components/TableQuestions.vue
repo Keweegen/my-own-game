@@ -1,7 +1,7 @@
 <template>
   <div class="table-questions">
-    <div class="table-questions-themes" v-if="!!themes.length">
-      <vs-row>
+    <div class="table-questions-themes" v-if="!!themes.length && !fetchThemes">
+      <vs-row justify="center">
         <vs-col w="12"><span class="section-title">Выберите тему</span></vs-col>
 
         <vs-col w="2" v-for="theme in themes" :key="theme.id">
@@ -15,10 +15,13 @@
       </vs-row>
     </div>
 
-    <div class="table-questions-list" v-if="!!currentTheme && !!questions.length">
+    <div
+      class="table-questions-list"
+      v-if="!!currentTheme && !!questions.length && !fetchQuestions"
+    >
       <hr />
 
-      <vs-row>
+      <vs-row justify="center">
         <vs-col w="12"><span class="section-title">Выберите ставку</span></vs-col>
 
         <vs-col w="2" v-for="question in questions" :key="question.id">
@@ -76,6 +79,22 @@ export default {
           count: this.countQuestions,
           offset: this.offsetQuestions,
         })
+    },
+
+    fetchThemes(value) {
+      if (value) {
+        this.loadingThemes = this.$vs.loading()
+      } else {
+        this.loadingThemes.close()
+      }
+    },
+
+    fetchQuestions(value) {
+      if (value) {
+        this.loadingQuestions = this.$vs.loading()
+      } else {
+        this.loadingQuestions.close()
+      }
     },
   },
 
@@ -138,7 +157,7 @@ export default {
     background: #fff;
     border-radius: 14px;
     text-align: center;
-    box-shadow: 0 0 10px rgba(158, 176, 178, 0.12);
+    box-shadow: 0 0 10px rgba(158, 176, 178, 0.3);
     padding: 0.75rem 1rem;
     margin: 5px;
     cursor: pointer;
@@ -161,11 +180,15 @@ export default {
       border-radius: 14px;
       text-align: center;
       padding: 0.75rem 1rem;
-      box-shadow: 0 0 10px rgba(158, 176, 178, 0.12);
+      box-shadow: 0 0 10px rgba(158, 176, 178, 0.3);
       margin: 5px;
       cursor: pointer;
       transition: background 0.25s ease, color 0.25s ease;
       font-size: 0.9rem;
+
+      &:hover {
+        background: #f4f7f8;
+      }
     }
   }
 }

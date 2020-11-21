@@ -1,5 +1,3 @@
-# my-own-game
-
 ## Project setup
 ```
 npm install
@@ -15,10 +13,17 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
+### Build with Docker
 ```
-npm run lint
+docker build -t keweegen/vue-app .
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Run with Docker
+```
+docker run -it keweegen/vue-app
+```
+
+### The application is now available at
+```
+http://localhost
+```
