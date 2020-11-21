@@ -20,10 +20,10 @@ docker build -t keweegen/vue-app .
 
 ### Run with Docker
 ```
-docker run -it keweegen/vue-app
+docker run -it 8080:80 keweegen/vue-app
 ```
 
 ### The application is now available at
 ```
-http://localhost
+http://localhost:8080
 ```
